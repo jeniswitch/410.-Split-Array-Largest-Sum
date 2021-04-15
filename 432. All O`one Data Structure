@@ -1,0 +1,121 @@
+public class AllOne {
+    public class Node {
+        public int val;
+        public Node pre;
+        public Node next;
+        public HashSet<string> keys;
+        public Node(int v) {
+            val = v;
+            pre = null;
+            next = null;
+            keys = new HashSet<string>();
+        }
+    }
+    private Dictionary<string, Node> dic;
+    private Node head;
+    private Node tail;
+    /** Initialize your data structure here. */
+    public AllOne() {
+        dic = new Dictionary<string, Node>();
+        head = new Node(-1);
+        tail = new Node(-1);
+        head.next = tail;
+        tail.pre = head;
+    }
+    
+    /** Inserts a new key <Key> with value 1. Or increments an existing key by 1. */
+    public void Inc(string key) {
+        if(!dic.ContainsKey(key)) {
+            Node crr = new Node(0);
+            crr.keys.Add(key);
+            AddNode(head, crr);
+            dic.Add(key, crr);
+        }
+        Node node = dic[key];
+        if(node.next == tail || node.next.val != node.val + 1) {
+            Node next = new Node(node.val + 1);
+            next.keys.Add(key);
+            AddNode(node, next);
+            dic[key] = node.next;
+        }
+        else {
+            node.next.keys.Add(key);
+            dic[key] = node.next;
+        }
+        node.keys.Remove(key);
+        if(node.keys.Count == 0) {
+            Remove(node);
+        }
+        
+    }
+    
+    /** Decrements an existing key by 1. If Key's value is 1, remove it from the data structure. */
+    public void Dec(string key) {
+        if(!dic.ContainsKey(key)) {
+            return;
+        }
+        Node node = dic[key];
+        node.keys.Remove(key);
+        if(node.val == 1) {
+            dic.Remove(key);
+        }
+        else if(node.pre == head || node.pre.val != node.val - 1) {
+            Node pre = new Node(node.val - 1);
+            pre.keys.Add(key);
+            AddNode(node.pre, pre);
+            dic[key] = pre;
+        }
+        else {
+            node.pre.keys.Add(key);
+            dic[key] = node.pre;
+        }
+        if(node.keys.Count == 0) {
+            Remove(node);
+        }
+        
+    }
+    
+    /** Returns one of the keys with maximal value. */
+    public string GetMaxKey() {
+        if(tail.pre.keys.Count == 0) {
+            return "";
+        }
+        return tail.pre.keys.First();
+    }
+    
+    /** Returns one of the keys with Minimal value. */
+    public string GetMinKey() {
+        if(head.next.keys.Count == 0) {
+            return "";
+        }
+        return head.next.keys.First();
+    }
+    
+    private void AddNode(Node crr, Node node) {
+        node.pre = crr;
+        node.next = crr.next;
+        
+        Node next = crr.next;
+        crr.next = node;
+        next.pre = node;
+    }
+    
+    private void Remove(Node node) {
+        Node next = node.next;
+        Node pre = node.pre;
+        
+        pre.next = next;
+        next.pre = pre;
+        node.pre = null;
+        node.next = null;
+    }
+}
+
+/**
+ * Your AllOne object will be instantiated and called as such:
+ * AllOne obj = new AllOne();
+ * obj.Inc(key);
+ * obj.Dec(key);
+ * string param_3 = obj.GetMaxKey();
+ * string param_4 = obj.GetMinKey();
+ */
