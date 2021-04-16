@@ -1,0 +1,48 @@
+public class SnapshotArray {
+    private SortedList<int,int>[] map;
+    private int snapID;
+    public SnapshotArray(int length) {
+        map = new SortedList<int, int>[length];
+        for(int i = 0; i < length; i++) {
+            map[i] = new SortedList<int, int>();
+            map[i].Add(0, 0);
+        }
+        snapID = 0;
+    }
+    
+    public void Set(int index, int val) {
+        map[index][snapID] = val;
+    }
+    
+    public int Snap() {
+        return snapID++;
+    }
+    
+    public int Get(int index, int snap_id) {
+         if(map[index].ContainsKey(snap_id)) {
+             return map[index][snap_id];
+         }
+         return map[index][FloorKey(index, snap_id)];
+    }
+    
+    private int FloorKey(int index, int snap_id) {
+        if(map[index].Keys.Last() < snap_id) {
+            return map[index].Keys.Last();
+        }
+        int start = 0;
+        int end = map[index].Keys.Count - 1;
+        while(start < end - 1) {
+            int mid = start + (end - start) / 2;
+            if(map[index].Keys[mid] < snap_id) {
+                start = mid;
+            }
+            else {
+                end = mid;
+            }
+        }
+        if(map[index].ContainsKey(map[index].Keys[start])) {
+            return map[index].Keys[start];
+        }
+        return 0;
+    }
+}
