@@ -1,0 +1,30 @@
+public class CustomStack {
+    private List<int> stack;
+    private int size;
+    public CustomStack(int maxSize) {
+        stack = new List<int>();
+        size = maxSize;
+    }
+    
+    public void Push(int x) {
+        if(stack.Count == size) {
+            return;
+        }
+        stack.Add(x);
+    }
+    
+    public int Pop() {
+        if(stack.Count == 0) {
+            return -1;
+        }
+        int res = stack[stack.Count - 1];
+        stack.RemoveAt(stack.Count - 1);
+        return res;
+    }
+    
+    public void Increment(int k, int val) {
+        for(int i = 0; i < Math.Min(stack.Count, k); i++) {
+            stack[i] += val;
+        }
+    }
+}
