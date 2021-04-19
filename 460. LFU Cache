@@ -1,0 +1,72 @@
+public class LFUCache {
+    private Dictionary<int, int> kvmap;
+    private Dictionary<int, int> kcmap;
+    private Dictionary<int, List<int>> clmap;
+    private int cap;
+    private int min;
+    public LFUCache(int capacity) {
+        kvmap = new Dictionary<int, int>();
+        kcmap = new Dictionary<int, int>();
+        clmap = new Dictionary<int, List<int>>();
+        cap = capacity;
+        min = -1;
+        clmap.Add(1, new List<int>());
+    }
+    
+    public int Get(int key) {
+        if(!kvmap.ContainsKey(key)) {
+            return -1;
+        }
+        UpdateList(key);
+        kcmap[key]++;
+        return kvmap[key];
+    }
+    
+    public void Put(int key, int value) {
+        if(cap == 0) {
+            return;
+        }
+        if(kvmap.ContainsKey(key)) {
+            kvmap[key] = value;
+            Get(key);
+            return;
+        }
+        if(kvmap.Count >= cap) {
+            int firstKey = clmap[min].First();
+            kvmap.Remove(firstKey);
+            kcmap.Remove(firstKey);
+            clmap[min].Remove(firstKey);
+        }
+        min = 1;
+        kvmap.Add(key, value);
+        kcmap.Add(key, 1);
+        clmap[min].Add(key);
+    }
+    
+    private void UpdateList(int key) {
+        int count = kcmap[key];
+        int newCount = count + 1;
+        if(clmap.ContainsKey(count)) {
+            clmap[count].Remove(key);
+        }
+        if(clmap.ContainsKey(newCount)) {
+            if(clmap[newCount].Contains(key)) {
+                clmap[newCount].Remove(key);
+            }
+            clmap[newCount].Add(key);
+        }
+        else {
+            clmap.Add(newCount, new List<int>(){key});
+        }
+        if(count == min && clmap[count].Count == 0) {
+            min++;
+        }
+    }
+}
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache obj = new LFUCache(capacity);
+ * int param_1 = obj.Get(key);
+ * obj.Put(key,value);
+ */
