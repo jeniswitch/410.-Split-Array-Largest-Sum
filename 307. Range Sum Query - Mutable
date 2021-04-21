@@ -1,0 +1,74 @@
+public class NumArray {
+    public class SegmentTreeNode {
+        public int start;
+        public int end;
+        public int sum;
+        public SegmentTreeNode left;
+        public SegmentTreeNode right;
+        public SegmentTreeNode (int s, int e, int su = 0) {
+            start = s;
+            end = e;
+            sum = su;
+        }
+    }
+    private SegmentTreeNode root;
+    public NumArray(int[] nums) {
+        root = BuildTree(nums, 0, nums.Length);
+    }
+    
+    public void Update(int index, int val) {
+        UpdateTree(root, index, val);
+    }
+    
+    public int SumRange(int left, int right) {
+        return SearchTree(root, left, right + 1);
+    }
+    
+    private SegmentTreeNode BuildTree(int[] nums, int start, int end) {
+        if(start >= end || start < 0 || end > nums.Length) {
+            return null;
+        }
+        if(start == end - 1) {
+            return new SegmentTreeNode(start, end, nums[start]);
+        }
+        int mid = start + (end - start) / 2;
+        SegmentTreeNode root = new SegmentTreeNode(start, end);
+        root.left = BuildTree(nums, start, mid);
+        root.right = BuildTree(nums, mid, end);
+        root.sum = root.left.sum + root.right.sum;
+        return root;
+    }
+    
+    private void UpdateTree(SegmentTreeNode node, int index, int val) {
+        if(index == node.start && node.start == node.end - 1) {
+            node.sum = val;
+            return;
+        }
+        int mid = node.start + (node.end - node.start) / 2;
+        if(index < mid) {
+            UpdateTree(node.left, index, val);
+        }
+        else {
+            UpdateTree(node.right, index, val);
+        }
+        node.sum = node.left.sum + node.right.sum;
+    }
+    
+    private int SearchTree(SegmentTreeNode node, int left, int right) {
+        if(left >= node.end || right <= node.start) {
+            return 0;
+        }
+        if(left <= node.start && right >= node.end) {
+            return node.sum;
+        }
+        return SearchTree(node.left, left, Math.Max(node.start, right))
+            + SearchTree(node.right, Math.Min(left, node.end), right);
+    }
+}
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray obj = new NumArray(nums);
+ * obj.Update(index,val);
+ * int param_2 = obj.SumRange(left,right);
+ */
