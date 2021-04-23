@@ -1,0 +1,52 @@
+public class Solution {
+    private int lower;
+    private int upper;
+    private int count;
+    public int CountRangeSum(int[] nums, int lower, int upper) {
+        long[] sums = new long[nums.Length + 1];
+        for(int i = 0; i < nums.Length; i++) {
+            sums[i + 1] = sums[i] + nums[i];
+        }
+        this.lower = lower;
+        this.upper = upper;
+        this.count = 0;
+        MergeSort(sums, 0, nums.Length);
+        return count;
+    }
+    private void MergeSort(long[] sums, int start, int end) {
+        if(start >= end) {
+            return;
+        }
+        int mid = start + (end - start) / 2;
+        MergeSort(sums, start, mid);
+        MergeSort(sums, mid + 1, end);
+        
+        int low = mid + 1, high = mid + 1; 
+        //2 indexes on the right side which make the sum between lower and upper
+        
+        int right = mid + 1;//right part pointer (regular merge sort pointer)
+        List<long> temp = new List<long>();
+        
+        for(int i = start; i <= mid; i++) {
+            //i is left part pointer (regular merge sort pointer)
+            while(low <= end && sums[low] - sums[i] < lower) {
+                low++;
+            }
+            while(high <= end && sums[high] - sums[i] <= upper) {
+                high++;
+            }
+            count += high - low;
+            while(right <= end && sums[right] < sums[i]) {
+                temp.Add(sums[right++]);
+            }
+            temp.Add(sums[i]);
+        }
+        while(right <= end) {
+            temp.Add(sums[right++]);
+        }
+        int index = 0;
+        for(int i = start; i <= end; i++) {
+            sums[i] = temp[index++];
+        }
+    }
+}
