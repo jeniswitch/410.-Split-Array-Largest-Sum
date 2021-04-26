@@ -1,0 +1,40 @@
+public class Solution {
+    public class FenWickTree {
+        public int[] sum;
+        public FenWickTree(int len) {
+            sum = new int[len];
+        }
+        public void Update(int index) {
+            while(index < sum.Length) {
+                sum[index]++;
+                index += (index & -index);
+            }
+        }
+        private int GetSum(int index) {
+            int res = 0;
+            while(index > 0) {
+                res += sum[index];
+                index -= (index & -index);
+            }
+            return res;
+        }
+        public int SumRange(int start, int end) {
+            return GetSum(end) - GetSum(start - 1);
+        }
+    }
+    public int CreateSortedArray(int[] instructions) {
+        int max = 0;
+        const int mod = 1000000007;
+        foreach(int num in instructions) {
+            max = Math.Max(max, num);
+        }
+        FenWickTree fwt = new FenWickTree(max + 1);
+        int count = 0;
+        for(int i = 0; i < instructions.Length; i++) {
+            count += Math.Min(fwt.SumRange(0, instructions[i] - 1), fwt.SumRange(instructions[i] + 1, max));
+            count = count % mod;
+            fwt.Update(instructions[i]);
+        }
+        return count;
+    }
+}
