@@ -26,17 +26,13 @@ public class Solution {
         }
         temp.Add(node.val);
         count += node.val;
-        if(node.left == null && node.right == null) {
-            if(count == targetSum) {
-                res.Add(new List<int>(temp));
-            }
-            count -= node.val;
-            temp.RemoveAt(temp.Count - 1);
-            return;
-            
+        if(node.left == null && node.right == null && count == targetSum) {
+           res.Add(new List<int>(temp));
         }
-        Helper(node.left, targetSum, temp);
-        Helper(node.right, targetSum, temp);
+        else {
+             Helper(node.left, targetSum, temp);
+            Helper(node.right, targetSum, temp);
+        }
         count -= node.val;
         temp.RemoveAt(temp.Count - 1);
     }
