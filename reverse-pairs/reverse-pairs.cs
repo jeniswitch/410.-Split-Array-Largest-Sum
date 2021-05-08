@@ -1,0 +1,44 @@
+public class Solution {
+    private int count;
+    public int ReversePairs(int[] nums) {
+        count = 0;
+        MergeSort(nums, 0, nums.Length - 1);
+        return count;
+    }
+    private void MergeSort(int[] nums, int start, int end) {//[start, end]
+        if(start >= end) {
+            return;
+        }
+        int mid = start + (end - start) / 2;
+        MergeSort(nums, start, mid);
+        MergeSort(nums, mid + 1, end);
+        int j = mid + 1;
+        for(int i = start; i <= mid; i++) {
+            while(j <= end && (long)nums[i] > (2 * (long)nums[j])) {
+                j++;
+            }
+            count += j - (mid + 1);
+        } 
+        int left = start, right = mid + 1;
+        List<int> temp = new List<int>();
+        while(left <= mid && right <= end) {
+            if(nums[left] <= nums[right]) {
+                temp.Add(nums[left++]);
+            }
+            else {
+                temp.Add(nums[right++]);
+            }
+        }
+        while(left <= mid) {
+            temp.Add(nums[left++]);
+        }
+        while(right <= end) {
+            temp.Add(nums[right++]);
+        }
+        int index = 0;
+        for(int i = start; i <= end; i++) {
+            nums[i] = temp[index++];
+        }
+        
+    }
+}
