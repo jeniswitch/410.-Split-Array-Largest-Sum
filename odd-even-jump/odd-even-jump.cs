@@ -1,36 +1,53 @@
 public class Solution {
-    public int OddEvenJumps(int[] arr) {
-        bool[] high = new bool[arr.Length];
-        bool[] low = new bool[arr.Length];
-        int lastIdx = arr.Length - 1;
-        high[lastIdx] = true;
-        low[lastIdx] = true;
-        SortedList<int, int> dic = new SortedList<int, int>();
-        dic.Add(arr[lastIdx], lastIdx);
-        int res = 1;
-        for(int i = arr.Length - 2; i >= 0; i--) {
-            int higherIdx = i;
-            int lowerIdx = i;
-            if(dic.ContainsKey(arr[i])) {
-                higherIdx = dic[arr[i]];
-                lowerIdx = dic[arr[i]];
-                dic[arr[i]] = i;
-            }
-            else {
-                dic.Add(arr[i], i);
-                int index = dic.IndexOfKey(arr[i]);
-                lowerIdx = index == 0? i : dic.Values[index - 1];
-                higherIdx = index == dic.Count - 1? i : dic.Values[index + 1];
-            }
-            if(higherIdx > i && low[higherIdx]) {
-                high[i] = true;
-                res++;
-            }
-            if(lowerIdx > i && high[lowerIdx]) {
-                low[i] = true;
-            }
+    public int OddEvenJumps(int[] A) {
+        int n =A.Length;
+        int[] next_higher=new int[n];
+        int[] next_lower = new int[n];
+        //fill array with invalid value to identify cases where no legal jumps possible
+        Array.Fill(next_higher,-1);
+        Array.Fill(next_lower,-1);
+
+        Stack<int> stack=new Stack<int>();
+        //sort array items ascending and get their original index as a list
+        //note that we need to order by value to handle duplicates
+        //remaining logic follows the monotonous stack solution 
+        var sortedIndex = A.Select((x, i) => new KeyValuePair<int, int>(x, i))
+                      .OrderBy(x => x.Key)
+                      .ThenBy(x=> x.Value)
+                      .Select(x => x.Value).ToList();
+        foreach(int i in sortedIndex)
+        {
+            while(stack.Count>0 && i>stack.Peek())
+                next_higher[stack.Pop()]=i;
+            stack.Push(i);
         }
-        return res;
+
+        stack.Clear();
+        //sort array items descending and get their original index as a list
+        //here also we need to order by value to handle duplicates
+        sortedIndex = A.Select((x, i) => new KeyValuePair<int, int>(x, i))
+                      .OrderByDescending(x => x.Key)
+                      .ThenBy(x=>x.Value)
+                      .Select(x => x.Value).ToList();
+        foreach(int i in sortedIndex)
+        {
+            while(stack.Count>0 && i>stack.Peek())
+                next_lower[stack.Pop()]=i;
+            stack.Push(i);
+        }
+
+        bool[] higher= new bool[n];
+        bool[] lower = new bool[n];
+        higher[n-1]=lower[n-1]=true;
+        int sum=1;
+        for(int i=n-2;i>=0;i--)
+        {
+            higher[i]=next_higher[i]==-1?false:lower[next_higher[i]];
+            lower[i]=next_lower[i]==-1?false:higher[next_lower[i]];
+            if(higher[i])
+                sum++;
+        }
+        return sum;
     }
 
 }
