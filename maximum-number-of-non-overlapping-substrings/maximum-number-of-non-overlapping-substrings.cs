@@ -13,22 +13,18 @@ public class Solution {
         for(int i = 0; i < s.Length; i++) {
             int index = s[i] - 'a';
             int l = low[index], r = high[index];
-             Console.WriteLine("i " + i  + " l " + l);
             if(i != l) {
                 continue;
             }
            
             int end = DoubleCheckHigh(s, l, r, low, high);
-            Console.WriteLine("i " + i  + " end " + end);
             if(end < 0) {
                 continue;
             }
             while(stack.Count > 0 && l >= stack.Peek()[0] 
                   && end <= stack.Peek()[1]) {
-                Console.WriteLine("pop " + stack.Peek()[0]  + " " + stack.Peek()[1]);
                 stack.Pop();
             }
-            Console.WriteLine("push " + l  + " " + end);
             stack.Push(new int[]{l, end});
         }
         IList<string> lst = new List<string>();
