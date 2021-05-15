@@ -1,18 +1,25 @@
 public class Solution {
     public bool CanReach(int[] arr, int start) {
-        bool[] visited = new bool[arr.Length];
-        return dfs(arr, start, visited);
-    }
-    private bool dfs(int[] arr, int index, bool[] visited) {
-        if(index >= arr.Length || index < 0 || visited[index]) {
-            return false;
+        Queue<int> q = new Queue<int>();
+        q.Enqueue(start);
+        while(q.Count > 0) {
+            int index = q.Dequeue();
+            if(arr[index] == 0) {
+                return true;
+            }
+            if(arr[index] < 0) {
+                continue;
+            }
+            int right = index + arr[index];
+            int left = index - arr[index];
+            if(right < arr.Length) {
+                q.Enqueue(right);
+            }
+            if(left >= 0) {
+                q.Enqueue(left);
+            }
+            arr[index] = -arr[index];
         }
-        if(arr[index] == 0) {
-            return true;
-        }
-        int right = index + arr[index];
-        int left = index - arr[index];
-        visited[index] = true;
-        return dfs(arr, right, visited) || dfs(arr, left, visited);
+        return false;
     }
 }
