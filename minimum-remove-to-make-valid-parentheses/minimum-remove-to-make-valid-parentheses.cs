@@ -1,35 +1,23 @@
 public class Solution {
     public string MinRemoveToMakeValid(string s) {
-        var stack = new Stack<int>();
-        var set = new HashSet<int>();
-        for(int i = 0; i < s.Length; i++) {
-            char c = s[i];
-            if(c == '(') {
-                stack.Push(i);
-            }
-            else if(c == ')') {
-                if(stack.Count == 0) {
-                    set.Add(i);
-                }
-                else {
-                    stack.Pop();
-                }
-            }
-        }
-        while(stack.Count > 0) {
-            set.Add(stack.Pop());
-        }
-        if(set.Count == 0) {
-            return s;
-        }
-        if(set.Count == s.Length) {
-            return "";
-        }
+        string res = RemoveInvalidChar(s, '(', ')');
+        res = RemoveInvalidChar(new string(res.Reverse().ToArray()), ')', '(');
+        return new string(res.Reverse().ToArray());
+    }
+    private string RemoveInvalidChar(string s, char open, char close) {
         var sb = new StringBuilder();
-        for(int i = 0; i < s.Length; i++) {
-            if(!set.Contains(i)) {
-                sb.Append(s[i]);
+        int balance = 0;
+        foreach(char c in s) {
+            if(c == open) {
+                balance++;
             }
+            else if(c == close) {
+                if(balance == 0) {
+                    continue;
+                }
+                balance--;
+            }
+            sb.Append(c);
         }
         return sb.ToString();
     }
