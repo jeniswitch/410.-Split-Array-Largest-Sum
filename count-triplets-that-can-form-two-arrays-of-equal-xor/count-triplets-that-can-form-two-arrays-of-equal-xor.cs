@@ -1,17 +1,23 @@
 public class Solution {
     public int CountTriplets(int[] arr) {
-        int count = 0;
-        int[] prefix = new int[arr.Length + 1];
+        var count = new Dictionary<int, int>();//prefixsum, count
+        var sumIndex = new Dictionary<int, int>();//prefixsum, sumindex
+        int prefixSum = 0;
+        count[prefixSum] = 1;
+        sumIndex[prefixSum] = -1;
+        int res = 0;
         for(int i = 0; i < arr.Length; i++) {
-            prefix[i + 1] = prefix[i] ^ arr[i];
-        }
-        for(int i = 0; i < arr.Length; i++) {
-            for(int j = i + 1; j < arr.Length + 1; j++) {
-                if(prefix[i] == prefix[j]) {
-                    count += j - i - 1;
-                }
+            prefixSum ^= arr[i];
+            int c = 0;
+            int s = 0;
+            if(count.ContainsKey(prefixSum)) {
+                c = count[prefixSum];
+                s = sumIndex[prefixSum];
+                res += (i - 1) * c - s;
             }
+            count[prefixSum] = c + 1;
+            sumIndex[prefixSum] = s + i;
         }
-        return count;
+        return res;
     }
 }
