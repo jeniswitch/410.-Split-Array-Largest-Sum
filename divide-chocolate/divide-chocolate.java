@@ -23,23 +23,3 @@ class Solution {
         return l;
     }
 }
-/*
-public int maximizeSweetness(int[] A, int K) {
-        int left = 1, right = (int)1e9 / (K + 1);
-        while (left < right) {
-            int mid = (left + right + 1) / 2;
-            int cur = 0, cuts = 0;
-            for (int a : A) {
-                if ((cur += a) >= mid) {
-                    cur = 0;
-                    if (++cuts > K) break;
-                }
-            }
-            if (cuts > K)
-                left = mid;
-            else
-                right = mid - 1;
-        }
-        return left;
-    }
-*/
