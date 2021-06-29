@@ -1,26 +1,42 @@
 class MyHashSet {
-    private boolean[] arr;
-    private final int N = (int)1e6 + 1;
+    private Bucket[] bucket;
+    private final int N = 769;
     /** Initialize your data structure here. */
     public MyHashSet() {
-        arr = new boolean[N];
+        bucket = new Bucket[N];
+        for(int i = 0; i < N; i++) {
+            bucket[i] = new Bucket();
+        }
     }
     
     public void add(int key) {
-        if(!contains(key)) {
-            arr[key] = true;
-        }
+        bucket[key % N].add(key);
     }
     
     public void remove(int key) {
-        if(contains(key)) {
-            arr[key] = false;
-        }
+        bucket[key % N].remove(key);
     }
     
     /** Returns true if this set contains the specified element */
     public boolean contains(int key) {
-        return arr[key];
+        return bucket[key % N].contains(key);
+    }
+    public class Bucket {
+        private LinkedList<Integer> lst;
+        public Bucket () {
+            lst = new LinkedList<Integer>();
+        }
+        public boolean contains(Integer key) {
+            return lst.indexOf(key) > -1;
+        }
+        public void add(Integer key) {
+            if(!contains(key)) {
+                lst.addFirst(key);
+            }
+        }
+        public void remove(Integer key) {
+            lst.remove(key);
+        }
     }
 }
 
