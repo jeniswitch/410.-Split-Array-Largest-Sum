@@ -9,28 +9,28 @@
  * }
  */
 class Solution {
-    private int[] arr;
-    private final int N = (int)1e4;
     private ListNode h;
-    private int len;
+    private Random rand;
     /** @param head The linked list's head.
         Note that the head is guaranteed to be not null, so it contains at least one node. */
     public Solution(ListNode head) {
-        arr = new int[N];
         h = head;
-        ListNode crr = h;
-        int idx = 0;
-        while(crr != null) {
-            arr[idx++] = crr.val;
-            crr = crr.next;
-        }
-        len = idx;
+        rand = new Random();
     }
     
     /** Returns a random node's value. */
     public int getRandom() {
-        Random rdm = new Random();
-        return arr[rdm.nextInt(len)];
+        ListNode crr = h;
+        int i = 1;
+        int r = crr.val;
+        while(crr.next != null) {
+            crr = crr.next;
+            if(rand.nextInt(i + 1) == i) {
+                r = crr.val;
+            }
+            i++;
+        }
+        return r;
     }
 }
 
