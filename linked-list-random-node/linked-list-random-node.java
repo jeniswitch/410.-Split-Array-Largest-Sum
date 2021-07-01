@@ -25,7 +25,7 @@ class Solution {
         int r = crr.val;
         while(crr.next != null) {
             crr = crr.next;
-            if(rand.nextInt(i + 1) == i) {
+            if(rand.nextInt(i + 1) == 0) {
                 r = crr.val;
             }
             i++;
