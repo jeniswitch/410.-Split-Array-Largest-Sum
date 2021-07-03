@@ -9,50 +9,25 @@
  * }
  */
 class Solution {
-    private ListNode head;
-    public ListNode mergeKLists(ListNode[] lists) {        
-        Arrays.sort(lists, (a, b) -> (a != null && b!= null) ? a.val - b.val : (a == null? -1 : 1));
-        head = new ListNode(0);
-        for(int i = 0; i < lists.length; i++) {
-            merge(lists, i);
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists.length == 0) {
+            return null;
+        }
+        PriorityQueue<ListNode> q = new PriorityQueue<>((a, b) -> a.val - b.val);
+        for(ListNode node : lists) {
+            if(node != null) {
+                q.offer(node);
+            }
+        }
+        ListNode head = new ListNode(0);
+        ListNode tail = head;
+        while(!q.isEmpty()) {
+            tail.next = q.poll();
+            tail = tail.next;
+            if(tail.next != null) {
+                q.offer(tail.next);
+            }
         }
         return head.next;
-    }
-    private void merge(ListNode[] lst, int i) {
-        if(lst[i] == null) {
-            return;
-        }
-        if(head.next == null) {
-            head.next = lst[i];
-            return;
-        }
-        ListNode p1 = head.next;
-        ListNode crr = lst[i];
-        ListNode p2 = crr;
-        while(p1.next != null && p2 != null) {
-            ListNode pre = p2;
-            while(p1.next != null && p2 != null && p1.val <= p2.val && p1.next.val >= p2.val) {
-                pre = p2;
-                p2 = p2.next;
-            }
-            p2 = pre;
-            if(p1.next != null && p1.next.val >= p2.val) {
-                ListNode next = p2.next;
-                p2.next = p1.next;
-                p1.next = crr;
-                p1 = p2.next;
-                p2 = next;
-                crr = next;
-            }
-            else if(p1.next != null){
-                p1 = p1.next;
-            }
-            if(p2 == null) {
-                return;
-            }
-        }
-        if(p2 != null) {
-            p1.next = p2;
-        }
     }
 }
