@@ -8,48 +8,26 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
+
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
-        if(k == 1) {
-            return head;
-        }
+        int n = 0;
+        for (ListNode i = head; i != null; n++, i = i.next);
+        
         ListNode dummy = new ListNode(0);
         dummy.next = head;
-        int count = 1;
-        ListNode crr = head;
-        ListNode dummyh = new ListNode(0);
-        ListNode lastTail = null;
-        while(crr != null && hasKNodes(crr, k)) {
-            while(crr != null && crr.next != null && count < k) {
-                count++;
-                ListNode next = crr.next;
-                crr.next = next.next;
-                next.next = dummy.next;
-                dummy.next = next;
+        ListNode pre = dummy, tail = head;
+        while(n >= k) {
+            for(int i = 1; i < k; i++) {
+                ListNode next = tail.next.next;
+                tail.next.next = pre.next;
+                pre.next = tail.next;
+                tail.next = next;
             }
-            if(dummyh.next == null) {
-                dummyh.next = dummy.next;
-            }
-            if(lastTail != null) {
-                lastTail.next = dummy.next;
-            }
-            count = 1;
-            lastTail = crr;
-            crr = crr.next;
-            dummy.next = crr;
+            n -= k;
+            pre = tail;
+            tail = tail.next;
         }
-        return dummyh.next;
-    }
-    private boolean hasKNodes(ListNode node, int k) {
-        int count = 0;
-        ListNode n = node;
-        while(n != null) {
-            n = n.next;
-            count++;
-            if(count == k) {
-                return true;
-            }
-        }
-        return false;
+        return dummy.next;
     }
 }
