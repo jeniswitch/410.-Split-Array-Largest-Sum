@@ -1,27 +1,31 @@
 class Solution {
     public int strStr(String haystack, String needle) {
-        if(needle.length() == 0) {
+        int n = needle.length();
+        int m = haystack.length();
+        if(n == 0) {
             return 0;
         }
-        if(haystack.length() == 0) {
+        if(m == 0) {
             return -1;
         }
-        int i = 0, j = 0;
-        while(i < haystack.length()) {
-            j = 0;
-            while(j < needle.length()) {
-                if(i + j == haystack.length()) {
-                    return -1;
-                }
-                if(haystack.charAt(i + j) != needle.charAt(j)) {
-                    break;
-                }
-                if(j == needle.length() - 1) {
-                    return i;
-                }
+        int[] ne = new int[n];
+        ne[0] = -1;
+        for(int i = 1, j = -1; i < n; i++) {
+            while(j >= 0 && needle.charAt(i) != needle.charAt(j + 1)) j = ne[j];
+            if(needle.charAt(i) == needle.charAt(j + 1)) {
                 j++;
             }
-            i++;
+            ne[i] = j;
+        }
+        for(int i = 0, j = -1; i < m; i++) {
+            //System.out.println(j);
+            while(j >= 0 && haystack.charAt(i) != needle.charAt(j + 1)) j = ne[j];
+            if(haystack.charAt(i) == needle.charAt(j + 1)) {
+                j++;
+            }
+            if(j == n - 1) {
+                return i- n + 1;
+            }
         }
         return -1;
     }
