@@ -1,3 +1,5 @@
+/*
+//O(N) time, O(N) space
 class Solution {
     public int[] productExceptSelf(int[] nums) {
         int[] left = new int[nums.length];
@@ -11,5 +13,22 @@ class Solution {
             left[i] *= right[i];
         }
         return left;
+    }
+}*/
+//O(N) time, O(1) space
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int[] res = new int[nums.length];
+        int runningPrefix = 1;
+        for(int i = 0; i < nums.length; i++) {
+            res[i] = runningPrefix;
+            runningPrefix *= nums[i];
+        }
+        int runningSuffix = 1;
+        for(int i = nums.length - 1; i >= 0; i--) {
+            res[i] *= runningSuffix;
+            runningSuffix *= nums[i];
+        }
+        return res;
     }
 }
