@@ -1,21 +1,18 @@
 class Solution {
     public int maxSubArrayLen(int[] nums, int k) {
-        int[] prefixSum = new int[nums.length + 1];
-        HashMap<Integer, Integer> hm = new HashMap<>();
-        for(int i = 1; i < nums.length + 1; i++) {
-            prefixSum[i] = nums[i - 1] + prefixSum[i - 1];
-        }
+        int sum = 0;
+        HashMap<Integer, Integer> hm = new HashMap<Integer, Integer>();
         int max = 0;
-        for(int i = 1; i < prefixSum.length; i++) {
-            int num = prefixSum[i];
-            if(num == k) {
-                max = Math.max(i, max);
+        for(int i = 0; i < nums.length; i++) {
+            sum += nums[i];
+            if(sum == k) {
+                max = i + 1;
             }
-            if(hm.containsKey(num)) {
-                max = Math.max(i - hm.get(num), max);
+            if(hm.containsKey(sum)) {
+                max = Math.max(max, i - hm.get(sum));
             }
             else {
-                hm.put(k + num, Math.min(hm.getOrDefault(k + num, prefixSum.length), i));
+                hm.put(k + sum, Math.min(hm.getOrDefault(k + sum, nums.length), i));
             }
         }
         return max;
