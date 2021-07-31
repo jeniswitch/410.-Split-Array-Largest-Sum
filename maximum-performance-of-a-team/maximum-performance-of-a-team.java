@@ -17,6 +17,6 @@ class Solution {
             }
             res = Math.max(res, sum * a[0]);
         }
-        return (int) (res % (long)(1e9 + 7));
+        return (int) (res % MOD);
     }
 }
