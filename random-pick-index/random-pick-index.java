@@ -1,20 +1,19 @@
 class Solution {
-    private HashMap<Integer, List<Integer>> map;
     private Random rand;
+    private int[] nums;
     public Solution(int[] nums) {
-        map = new HashMap<>();
         rand = new Random();
-        for(int i = 0; i < nums.length; i++) {
-            int n = nums[i];
-            map.putIfAbsent(n, new ArrayList<Integer>());
-            map.get(n).add(i);
-        }
+        this.nums = nums;
     }
     
     public int pick(int target) {
-        List<Integer> lst = map.get(target);
-        int idx = rand.nextInt(lst.size());
-        return lst.get(idx);
+        int res = 0, count = 0;
+        for(int i = 0; i < nums.length; i++) {
+            if(nums[i] == target && rand.nextInt(++count) == 0) {
+                res = i;
+            }
+        }
+        return res;
     }
 }
 
