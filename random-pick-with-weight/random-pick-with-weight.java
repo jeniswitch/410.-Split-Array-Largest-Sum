@@ -1,30 +1,19 @@
 class Solution {
-    private int[] sum;
-    private Random rand;
+    private double[] p;
     public Solution(int[] w) {
-        rand = new Random();
-        for(int i = 1; i < w.length; i++) {
-            w[i] += w[i - 1];
+        p = new double[w.length];
+        double sum = 0;
+        for(int i : w) {
+            sum += i;
         }
-        this.sum = w;
+        for(int i = 0; i < w.length; i++) {
+            w[i] += i == 0 ? 0 : w[i - 1];
+            p[i] = w[i] / sum;
+        }
     }
     
     public int pickIndex() {
-        int target = rand.nextInt(sum[sum.length - 1]) + 1;
-        int left = 0, right = sum.length - 1;
-        while(left < right) {
-            int mid = left + right >> 1;
-            if(sum[mid] == target) {
-                return mid;
-            }
-            else if(sum[mid] > target) {
-                right = mid;
-            }
-            else {
-                left = mid + 1;
-            }
-        }
-        return left;
+        return Math.abs(Arrays.binarySearch(p, Math.random())) - 1;
     }
 }
 
