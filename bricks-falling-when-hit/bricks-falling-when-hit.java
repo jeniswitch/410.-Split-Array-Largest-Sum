@@ -1,77 +1,73 @@
 class Solution {
-    private static final int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    private int[] p;
+    private int[] size;
+    private int[][] grid;
+    private final int[][] dir = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
     public int[] hitBricks(int[][] grid, int[][] hits) {
-        int rows = grid.length;
-        int cols = grid[0].length;
-        DisjointSet ds = new DisjointSet(rows * cols + 1);
-        for(int[] hit : hits) {
-            if(grid[hit[0]][hit[1]] == 1) {
-                grid[hit[0]][hit[1]] = 2;
+        int m = grid.length;
+        int n = grid[0].length;
+        p = new int[m * n + 1];
+        size = new int[p.length];
+        Arrays.fill(size, 1);
+        for(int i = 0; i < p.length; i++) {
+            p[i] = i;
+        }
+        this.grid = grid;
+        for(int[] h : hits) {
+            int x = h[0];
+            int y = h[1];
+            if(grid[x][y] == 1) {
+                grid[x][y] = 2;
             }
         }
-        
-        for(int i = 0; i < rows; i++) {
-            for(int j = 0; j < cols; j++) {
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
                 if(grid[i][j] == 1) {
-                    unionAround(i, j, ds, grid);
+                    unionAround(i, j);
                 }
             }
         }
-        
-        int numleft = ds.s[ds.find(0)];
-        int i = hits.length - 1;
+        int left = size[find(0)];
         int[] res = new int[hits.length];
-        while(i >= 0) {
+        for(int i = hits.length - 1; i >= 0; i--) {
             int x = hits[i][0];
             int y = hits[i][1];
             if(grid[x][y] == 2) {
                 grid[x][y] = 1;
-                unionAround(x, y, ds, grid);
-                int nNumLeft = ds.s[ds.find(0)];
-                res[i] = Math.max(nNumLeft - numleft - 1, 0);
-                numleft = nNumLeft;
+                unionAround(x, y);
+                int newLeft = size[find(0)];
+                res[i] = Math.max(newLeft - left - 1, 0);
+                left = newLeft;
             }
-            i--;
         }
         return res;
     }
-    private void unionAround(int x, int y, DisjointSet ds, int[][] grid) {
-        int crrPos = position(x, y, grid[0].length);
-        for(int[] direction : directions) {
-            int nx = x + direction[0];
-            int ny = y + direction[1];
-            if(nx >= 0 && nx < grid.length && ny >= 0 && ny < grid[0].length && grid[nx][ny] == 1) {
-                ds.union(crrPos, position(nx, ny, grid[0].length));
-            }
-        }
-        if(x == 0) {
-            ds.union(0, crrPos);
+    private int find(int x) {
+        if(x != p[x]) p[x] = find(p[x]);
+        return p[x];
+    }
+    private int getPosition(int i, int j) {
+        return i * grid[0].length + j + 1;
+    }
+    private void union(int x, int y) {
+        int px = find(x);
+        int py = find(y);
+        if(px != py) {
+            p[px] = py;
+            size[py] += size[px];
         }
     }
-    private int position(int x, int y, int cols) {
-        return x * cols + y + 1;
-    }
-    private class DisjointSet {
-        int[] p, s;
-        public DisjointSet(int n) {
-            p = new int[n];
-            s = new int[n];
-            Arrays.fill(s, 1);
-            for(int i = 0; i < n; i++) {
-                p[i] = i;
+    private void unionAround(int i, int j) {
+        int crr = getPosition(i, j);
+        for(int k = 0; k < dir.length; k++) {
+            int x = i + dir[k][0];
+            int y = j + dir[k][1];
+            if(x >= 0 && y >= 0 && x < grid.length && y < grid[0].length && grid[x][y] == 1)             {
+                union(crr, getPosition(x, y));
             }
         }
-        public int find(int x) {
-            if(p[x] != x) p[x] = find(p[x]);
-            return p[x];
-        }
-        public void union(int x, int y) {
-            int px = find(x);
-            int py = find(y);
-            if(px != py) {
-                p[px] = py;
-                s[py] += s[px];
-            }
+        if(i == 0) {
+            union(0, crr);
         }
     }
 }
