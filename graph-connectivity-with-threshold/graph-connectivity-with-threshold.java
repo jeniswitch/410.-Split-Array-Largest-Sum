@@ -5,11 +5,9 @@ class Solution {
         for(int i = 0; i <= n; i++) {
             p[i] = i;
         }
-        for(int i = 1; i <= n; i++) {
-            for(int j = threshold + 1; j <= i; j++) {
-                if(i % j == 0) {
-                    union(i, j);
-                }
+        for(int i = threshold + 1; i <= n; i++) {
+            for(int j = 2 * i; j <= n; j += i) {
+                union(j, i);
             }
         }
         List<Boolean> res = new ArrayList<>();
