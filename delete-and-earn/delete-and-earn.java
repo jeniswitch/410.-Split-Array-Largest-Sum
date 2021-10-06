@@ -1,17 +1,15 @@
 class Solution {
     public int deleteAndEarn(int[] nums) {
-        int n = 10001;
-        int[] v = new int[n];
-        for(int num : nums) {
-            v[num] += num;
+        int[] buckets = new int[10001];
+        for(int n : nums) {
+            buckets[n] += n;
         }
-        int take = 0, skip = 0;
-        for(int i = 0; i < n; i++) {
-            int takei = skip + v[i];
-            int skipi = Math.max(skip, take);
-            take = takei;
-            skip = skipi;
+        int[] dp = new int[10001];//max number of points in the first i + 1 buckets
+        dp[0] = 0;
+        dp[1] = buckets[1];
+        for(int i = 2; i <= 10000; i++) {
+            dp[i] = Math.max(dp[i - 2] + buckets[i], dp[i - 1]);
         }
-        return Math.max(take, skip);
+        return dp[10000];
     }
 }
