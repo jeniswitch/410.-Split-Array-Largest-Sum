@@ -1,20 +1,27 @@
 class Solution {
     public int minCostII(int[][] costs) {
-        for(int house = 1; house < costs.length; house++) {
-            for(int c = 0; c < costs[0].length; c++) {
-                int min = Integer.MAX_VALUE;
-                for(int k = 0; k < costs[0].length; k++) {
-                    if(c != k) {
-                        min = Math.min(min, costs[house - 1][k]);
-                    }
+        int n = costs.length;
+        int k = costs[0].length;
+        int minIdx1 = -1, minIdx2 = -1;
+        for(int i = 0; i< n; i++) {
+            int pre1 = minIdx1, pre2 = minIdx2;
+            minIdx1= minIdx2 = -1;
+            for(int j = 0; j < k; j++) {
+                if(j != pre1) {
+                    costs[i][j] += pre1 < 0 ? 0 : costs[i - 1][pre1];
                 }
-                costs[house][c] += min;
+                else {
+                    costs[i][j] += pre2 < 0 ? 0 : costs[i - 1][pre2];
+                }
+                if(minIdx1 < 0 || costs[i][j] < costs[i][minIdx1]) {
+                    minIdx2 = minIdx1;
+                    minIdx1 = j;
+                }
+                else if(minIdx2 < 0 || costs[i][j] < costs[i][minIdx2]) {
+                    minIdx2 = j;
+                }
             }
         }
-        int min = Integer.MAX_VALUE;
-        for(int c : costs[costs.length - 1]) {
-            min = Math.min(min, c);
-        }
-        return min;
+        return costs[n - 1][minIdx1];
     }
 }
