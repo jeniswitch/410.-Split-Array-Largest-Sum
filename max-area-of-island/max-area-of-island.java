@@ -10,11 +10,9 @@ class Solution {
         }
         return max;
     }
-    private int dfs(int[][] grid, int x, int y) {
-        if(x < 0 || y < 0 || x == grid.length || y == grid[0].length || grid[x][y] == 0) {
-            return 0;
-        }
-        grid[x][y] = 0;
-        return 1 + dfs(grid, x, y + 1) + dfs(grid, x + 1, y) + dfs(grid, x, y - 1) + dfs(grid, x - 1, y);
+    private int dfs(int[][] grid, int i, int j) {
+        if(i < 0 || i == grid.length || j < 0 || j == grid[0].length || grid[i][j] == 0) return 0;
+        grid[i][j] = 0;
+        return dfs(grid, i, j + 1) + dfs(grid, i, j - 1) + dfs(grid, i + 1, j) + dfs(grid, i - 1, j) + 1;
     }
 }
