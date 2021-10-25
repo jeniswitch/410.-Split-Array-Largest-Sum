@@ -14,22 +14,20 @@ class Node {
 */
 
 class Solution {
-    private HashMap<Node, Node> map;
-    private int count;
     public Node copyRandomList(Node head) {
-        map = new HashMap<>();
-        return helper(head);
+        Node crr = head;
+        HashMap<Node, Node> map = new HashMap<>();
+        return helper(crr, map);
     }
-    
-    private Node helper(Node node) {
-        if(node == null) return node;
-        if(map.containsKey(node)) {
-            return map.get(node);
+    private Node helper(Node crr, HashMap<Node, Node> map) {
+        if(crr == null) return null;
+        if(map.containsKey(crr)) {
+            return map.get(crr);
         }
-        Node newN = new Node(node.val);
-        map.put(node, newN);
-        newN.next = helper(node.next);
-        newN.random = helper(node.random);
-        return newN;
+        Node node = new Node(crr.val);
+        map.put(crr, node);
+        node.next = helper(crr.next, map);
+        node.random = helper(crr.random, map);
+        return node;
     }
 }
