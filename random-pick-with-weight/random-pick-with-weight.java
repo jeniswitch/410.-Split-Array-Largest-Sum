@@ -1,19 +1,19 @@
 class Solution {
-    private double[] p;
+    private int[] prefixSum;
+    private Random rd;
     public Solution(int[] w) {
-        p = new double[w.length];
-        double sum = 0;
-        for(int i : w) {
-            sum += i;
-        }
-        for(int i = 0; i < w.length; i++) {
-            w[i] += i == 0 ? 0 : w[i - 1];
-            p[i] = w[i] / sum;
+        rd = new Random();
+        prefixSum = new int[w.length];
+        prefixSum[0] = w[0];
+        for(int i = 1; i < w.length; i++) {
+            prefixSum[i] = prefixSum[i - 1] + w[i];
         }
     }
     
     public int pickIndex() {
-        return Math.abs(Arrays.binarySearch(p, Math.random())) - 1;
+        int idx = rd.nextInt(prefixSum[prefixSum.length - 1]) + 1;
+        int i = Arrays.binarySearch(prefixSum, idx);
+        return i >= 0 ? i : -i - 1;
     }
 }
 
