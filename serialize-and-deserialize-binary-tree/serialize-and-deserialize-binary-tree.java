@@ -8,50 +8,35 @@
  * }
  */
 public class Codec {
-    private Queue<TreeNode> q;
+
     // Encodes a tree to a single string.
     public String serialize(TreeNode root) {
-        q = new LinkedList<TreeNode>();
-        if(root == null) {
-            return "";
+        StringBuilder sb = new StringBuilder();
+        buildString(sb, root);
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+    private void buildString(StringBuilder sb, TreeNode node) {
+        if(node == null) sb.append("N,");
+        else {
+            sb.append(node.val + ",");
+            buildString(sb, node.left);
+            buildString(sb, node.right);
         }
-        String res = "";
-        q.offer(root);
-        while(!q.isEmpty()) {
-            TreeNode node = q.poll();
-            if(node == null) {
-                res += "n ";
-                continue;
-            }
-            res += String.valueOf(node.val) + " ";
-            q.offer(node.left);
-            q.offer(node.right);
-        }
-        return res;
     }
     // Decodes your encoded data to tree.
     public TreeNode deserialize(String data) {
-        if(data.length() == 0) {
-            return null;
+        return helper(new LinkedList<>(Arrays.asList(data.split(","))));
+    }
+    private TreeNode helper(Queue<String> q) {
+        String val = q.poll();
+        if(val.equals("N")) return null;
+        else {
+            TreeNode node = new TreeNode(Integer.valueOf(val));
+            node.left = helper(q);
+            node.right = helper(q);
+            return node;
         }
-        String[] arr = data.split(" ");
-        Queue<TreeNode> q = new LinkedList<>();
-        TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
-        q.offer(root);
-        for(int i = 1; i < arr.length; i++) {
-            TreeNode node = q.poll();
-            if(!arr[i].equals("n")) {
-                TreeNode left = new TreeNode(Integer.parseInt(arr[i]));
-                node.left = left;
-                q.offer(left);
-            }
-            if(!arr[++i].equals("n")) {
-                TreeNode right = new TreeNode(Integer.parseInt(arr[i]));
-                node.right = right;
-                q.offer(right);
-            }
-        }
-        return root;
     }
 }
 
