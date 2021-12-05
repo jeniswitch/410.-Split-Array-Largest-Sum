@@ -1,16 +1,20 @@
 class Solution {
     public int mctFromLeafValues(int[] arr) {
-        var stack = new Stack<Integer>();
-        stack.push(Integer.MAX_VALUE);
+        Stack<Integer> stack = new Stack<>();
         int res = 0;
-        for(int i : arr) {
-            while(stack.peek() < i) {
+        for(int i = 0; i < arr.length; i++) {
+            while(!stack.isEmpty() && stack.peek() < arr[i]) {
                 int temp = stack.pop();
-                res += temp * Math.min(stack.peek(), i);//key line
+                if(stack.isEmpty()) {
+                    res += temp * arr[i];
+                }
+                else {
+                    res += temp * Math.min(stack.peek(), arr[i]);
+                }
             }
-            stack.push(i);
+            stack.push(arr[i]);
         }
-        while(stack.size() > 2) {
+        while(stack.size() > 1) {
             res += stack.pop() * stack.peek();
         }
         return res;
