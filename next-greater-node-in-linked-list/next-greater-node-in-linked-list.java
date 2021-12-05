@@ -10,17 +10,17 @@
  */
 class Solution {
     public int[] nextLargerNodes(ListNode head) {
-        Stack<Integer> stack = new Stack<>();
-        ArrayList<Integer> arr = new ArrayList<>();
+        List<Integer> lst = new ArrayList<>();
         ListNode node = head;
         while(node != null) {
-            arr.add(node.val);
+            lst.add(node.val);
             node = node.next;
         }
-        int[] res = new int[arr.size()];
-        for(int i = 0; i < arr.size(); i++) {
-            while(!stack.isEmpty() && arr.get(stack.peek()) < arr.get(i)) {
-                res[stack.pop()] = arr.get(i);
+        int[] res = new int[lst.size()];
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < lst.size(); i++) {
+            while(!stack.isEmpty() && lst.get(stack.peek()) < lst.get(i)) {
+                res[stack.pop()] = lst.get(i);
             }
             stack.push(i);
         }
