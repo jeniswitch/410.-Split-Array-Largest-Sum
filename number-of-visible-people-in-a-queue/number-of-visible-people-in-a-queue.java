@@ -4,9 +4,9 @@ class Solution {
         int[] res = new int[heights.length];
         for(int i = heights.length - 1; i >= 0; i--) {
             int count = 0;
-            while(!stack.isEmpty() && heights[i] >= heights[stack.peek()]) {
-                count++;
+            while(!stack.isEmpty() && heights[stack.peek()] < heights[i]) {
                 stack.pop();
+                count++;
             }
             res[i] = stack.isEmpty() ? count : count + 1;
             stack.push(i);
