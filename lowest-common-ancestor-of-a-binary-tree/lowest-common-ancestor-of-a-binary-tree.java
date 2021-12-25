@@ -9,26 +9,11 @@
  */
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        boolean pExistLeft = helper(root.left, p);
-        boolean qExistRight = helper(root.right, q);
-        if(root.val == p. val || root.val == q.val) return root;
-        if(pExistLeft && qExistRight) {
-            return root;
-        }
-        boolean qExistLeft = helper(root.left, q);
-        if(pExistLeft && qExistLeft){
-            return lowestCommonAncestor(root.left, p, q);
-        }
-        boolean pExistRight = helper(root.right, p);
-        if(pExistRight && qExistRight){
-            return lowestCommonAncestor(root.right, p, q);
-        }
-        else return lowestCommonAncestor(root, q, p);
-        
-    }
-    private boolean helper(TreeNode node, TreeNode t) {
-        if(node == null) return false;
-        if(node.val == t.val) return true;
-        return helper(node.left, t) || helper(node.right, t);
+        if(root == null || root == p || root == q) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if(left != null && right != null) return root;
+        else if(left != null) return left;
+        else return right;
     }
 }
