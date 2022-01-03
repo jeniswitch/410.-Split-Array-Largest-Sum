@@ -16,28 +16,28 @@
 class Solution {
     public List<List<Integer>> verticalOrder(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
         if(root == null) return res;
-        HashMap<Integer, List<Integer>> map = new HashMap<>();
-        Queue<TreeNode> qn = new LinkedList<>();
-        Queue<Integer> qd = new LinkedList<>();
-        qn.offer(root);
-        qd.offer(0);
+        Queue<TreeNode> q = new LinkedList<>();
+        Queue<Integer> levels = new LinkedList<>();
+        q.offer(root);
+        levels.offer(0);
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
-        while(!qn.isEmpty()) {
-            TreeNode node = qn.poll();
-            int d = qd.poll();
-            min = Math.min(d, min);
-            max = Math.max(d, max);
-            map.putIfAbsent(d, new ArrayList<>());
-            map.get(d).add(node.val);
+        while(!q.isEmpty()) {
+            TreeNode node = q.poll();
+            int level = levels.poll();
+            min = Math.min(min, level);
+            max = Math.max(max, level);
+            map.putIfAbsent(level, new ArrayList<>());
+            map.get(level).add(node.val);
             if(node.left != null) {
-                qn.offer(node.left);
-                qd.offer(d - 1);
+                q.offer(node.left);
+                levels.offer(level - 1);
             }
             if(node.right != null) {
-                qn.offer(node.right);
-                qd.offer(d + 1);
+                q.offer(node.right);
+                levels.offer(level + 1);
             }
         }
         for(int i = min; i <= max; i++) {
