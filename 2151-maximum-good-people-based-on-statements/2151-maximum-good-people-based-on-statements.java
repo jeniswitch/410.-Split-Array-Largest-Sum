@@ -6,7 +6,7 @@ class Solution {
         for(int i = 0; i < statements.length; i++) {
             HashSet<Integer> good = new HashSet<>();
             good.add(i);
-            System.out.println("restart from " + i);
+            //System.out.println("restart from " + i);
             HashSet<Integer> bad = new HashSet<>();
             HashSet<Integer>[]  res = dfs(statements, i, good, bad);
             if(res != null) {
@@ -38,7 +38,7 @@ class Solution {
                 if(bad.contains(i)) {
                     return null;
                 }
-                System.out.println("add " + i + " to good");
+                //System.out.println("add " + i + " to good");
                 good.add(i);
                 HashSet<Integer>[] res = dfs(statements, i, good, bad);
                 if(res == null) {
@@ -50,15 +50,15 @@ class Solution {
             }
             else if(statements[person][i] == 0) {
                 if(good.contains(i)) {
-                    System.out.println(i + " return null 2");
+                    //System.out.println(i + " return null 2");
                     return null;
                 }
                 bad.add(i);
-                System.out.println("add " + i + " to bad");
+                //System.out.println("add " + i + " to bad");
             }
             
         }
-        System.out.println("person " + person + " return good bad");
+        //System.out.println("person " + person + " return good bad");
         HashSet<Integer>[] res = new HashSet[2];
         res[0] = good;
         res[1] = bad;
