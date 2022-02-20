@@ -7,9 +7,7 @@ class Solution {
         StringBuilder sb = new StringBuilder();
         int repeat = 0;
         for(int i = 0; i < s.length(); i++) {
-            int loop = 0;
             for(char c = 'z'; c >= 'a'; c--) {
-                loop++;
                 if(count[c - 'a'] > 0) {
                    if(sb.length() > 0 && sb.charAt(sb.length() - 1) != c) {
                         repeat = 0;
@@ -17,7 +15,6 @@ class Solution {
                             continue;
                         }
                    } 
-                    //repeat = 0;
                     if(repeat < repeatLimit) {
                         sb.append(c);
                         repeat++;
@@ -25,7 +22,6 @@ class Solution {
                         break;
                     } 
                 }
-                
             }
         }
         return sb.toString();
