@@ -6,16 +6,16 @@ class Solution {
             arr[i] = i + 1;
         }
         int res = 0;
-        return dfs(arr, 1,  new HashSet<>());
+        return dfs(arr, 1,  new boolean[n]);
     }
-    private int dfs(int[] arr, int pos, HashSet<Integer> visited) {
-        if(visited.size() == arr.length) return 1;
+    private int dfs(int[] arr, int pos, boolean[] visited) {
+        if(pos == arr.length + 1) return 1;
         int count = 0;
         for(int i = 0; i < arr.length; i++) {
-            if(visited.contains(i) || !isValid(pos, arr[i])) continue;
-            visited.add(i);
+            if(visited[i] || !isValid(pos, arr[i])) continue;
+            visited[i] = true;
             count += dfs(arr, pos + 1,  visited);
-            visited.remove(i);
+            visited[i] = false;
         }
         return count;
     }
