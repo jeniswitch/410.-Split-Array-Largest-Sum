@@ -5,44 +5,29 @@ class Solution {
             count[c - 'a']++;
         }
         StringBuilder sb = new StringBuilder();
-        dfs(count, repeatLimit, 0, sb);
-        return sb.toString();
-    }
-    private boolean dfs(int[] count, int repeatLimit, int repeat, StringBuilder sb) {
-        for(char c = 'z'; c >= 'a'; c--) {
-            int idx = c - 'a';
-            if(count[idx] > 0) {
-                if(repeat < repeatLimit) {
-                    count[c - 'a']--;
-                    int newRepeat = 1;
-                    if(sb.length() == 0 || sb.charAt(sb.length() - 1) == c) {
-                        newRepeat += repeat;
-                    }
-                    sb.append(c);
-                    if(dfs(count, repeatLimit, newRepeat, sb)) {
-                        return true;
-                    }
-                    sb.setLength(sb.length() - 1);
-                    count[c - 'a']++;
-                }
-                else {
-                    repeat = 0;
-                    if (sb.charAt(sb.length() - 1) != c) {
-                        c++;
-                    }
-                }
-                /*else if(c != 'a') {
-                    repeat = 0;
-                }
-                else {
-                    while(repeat < repeatLimit) {
+        int repeat = 0;
+        for(int i = 0; i < s.length(); i++) {
+            int loop = 0;
+            for(char c = 'z'; c >= 'a'; c--) {
+                loop++;
+                if(count[c - 'a'] > 0) {
+                   if(sb.length() > 0 && sb.charAt(sb.length() - 1) != c) {
+                        repeat = 0;
+                        if(repeat == repeatLimit) {
+                            continue;
+                        }
+                   } 
+                    //repeat = 0;
+                    if(repeat < repeatLimit) {
                         sb.append(c);
                         repeat++;
-                    }
-                }*/
+                        count[c - 'a']--;
+                        break;
+                    } 
+                }
                 
             }
         }
-        return true;
+        return sb.toString();
     }
 }
