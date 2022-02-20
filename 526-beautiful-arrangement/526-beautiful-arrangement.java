@@ -6,7 +6,7 @@ class Solution {
             arr[i] = i + 1;
         }
         int res = 0;
-        return dfs(arr, 0,  new HashSet<>());
+        return dfs(arr, 1,  new HashSet<>());
     }
     private int dfs(int[] arr, int pos, HashSet<Integer> visited) {
         if(visited.size() == arr.length) return 1;
@@ -20,6 +20,6 @@ class Solution {
         return count;
     }
     private boolean isValid(int i, int num) {
-        return (i + 1) % num == 0 || num % (i + 1) == 0;
+        return i % num == 0 || num % i == 0;
     }
 }
