@@ -11,7 +11,7 @@ class Solution {
         long start = min, end = start * totalTrips;
         while(start < end) {
             long mid = start + (end - start) / 2;
-            if(check(time, mid) < totalTrips) {
+            if(check(time, mid, totalTrips) < totalTrips) {
                 start = mid + 1;
             }
             else {
@@ -20,9 +20,9 @@ class Solution {
         }
         return start;
     }
-    private long check(int[] time, long t) {
+    private long check(int[] time, long t, int totalTrips) {
         long count = 0;
-        for(int i = 0; i < time.length; i++) {
+        for(int i = 0; i < time.length && count < totalTrips; i++) {
             count += t / (long)time[i];
         }
         return count;
