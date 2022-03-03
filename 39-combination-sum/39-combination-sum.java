@@ -13,6 +13,7 @@ class Solution {
             return;
         }
         for(int i = pos; i < candidates.length; i++) {
+            if(candidates[i] + sum > target) break;
             lst.add(candidates[i]);
             dfs(candidates, target, i, lst, candidates[i] + sum);
             lst.remove(lst.size() - 1);
