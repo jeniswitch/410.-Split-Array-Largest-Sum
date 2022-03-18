@@ -1,66 +1,62 @@
 class Solution {
     public String alienOrder(String[] words) {
-        int[] d = new int[26];
-        Arrays.fill(d, -1);
+        int N = 26;
+        Map<Character, List<Character>> map = new HashMap<>();
+        int[] d = new int[N];
+        int count = 0;
         for(String w : words) {
             for(char c : w.toCharArray()) {
-                if(d[c - 'a'] == -1) {
-                    d[c - 'a']++;
+                if(d[c - 'a'] == 0) {
+                    d[c - 'a'] = 1;
+                    count++;
                 }
             }
         }
-        HashMap<Character, Set<Character>> map = new HashMap<>();
-        for(int i = 0; i < words.length - 1; i++) {
-            String crr = words[i];
-            String next = words[i + 1];
-            int len = Math.min(crr.length(), next.length());
+        for(int i = 1; i < words.length; i++) {
+            String w1 = words[i - 1];
+            String w2 = words[i];
+            int len = Math.min(w1.length(), w2.length());
+            int j = 0;
             boolean same = true;
-            for(int j = 0; j < len; j++) {
-                char c1 = crr.charAt(j);
-                char c2 = next.charAt(j);
+            while(j < len) {
+                char c1 = w1.charAt(j);
+                char c2 = w2.charAt(j);
                 if(c1 != c2) {
                     same = false;
-                    map.putIfAbsent(c1, new HashSet<>());
-                    if(!map.get(c1).contains(c2)) {
-                        d[c2 - 'a']++;
-                        map.get(c1).add(c2);
-                    }
+                    List<Character> lst = map.getOrDefault(c1, new ArrayList<>());
+                    lst.add(c2);
+                    map.put(c1, lst);
+                    d[c2 - 'a']++;
                     break;
                 }
+                j++;
             }
-            if(same && crr.length() > next.length()) {
+            if(same && w1.length() > w2.length()) {
                 return "";
             }
         }
         Queue<Integer> q = new LinkedList<>();
-        for(int i = 0; i < d.length; i++) {
-            if(d[i] == 0) {
+        for(int i = 0; i < N; i++) {
+            if(d[i] == 1){
                 q.offer(i);
             }
         }
-        String res = "";
+        StringBuilder sb = new StringBuilder();
         while(!q.isEmpty()) {
-            int c = q.poll();
-            char cChar = (char)(c + 'a');
-            res += cChar;
-            if(map.containsKey(cChar)) {
-                Iterator it = map.get(cChar).iterator();
-                while(it.hasNext()) {
-                    char next = (char)it.next();
-                    int idx = next - 'a';
-                    d[idx]--;
-                    if(d[idx] == 0) {
-                        q.offer(idx);
-                    }
+            int size = q.size();
+            while(size-- > 0) {
+                int crr = q.poll();
+                char c = (char)(crr + 'a');
+                sb.append(c);
+                for(Character i : map.getOrDefault(c, new ArrayList<>())) {
+                    d[i - 'a']--;
+                    if(d[i - 'a'] == 1) {
+                        q.offer(i - 'a');
+                    } 
                 }
             }
         }
-        int count = 0;
-        for(int i = 0; i < d.length; i++) {
-            if(d[i] >= 0) {
-                count++;
-            }
-        }
-        return count == res.length() ? res : "";
+        if(sb.length() != count) return "";
+        return sb.toString();
     }
 }
