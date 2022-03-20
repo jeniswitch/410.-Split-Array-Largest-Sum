@@ -1,38 +1,39 @@
 class Solution {
     public String decodeString(String s) {
-        Stack<String> stackNum = new Stack<>();
-        Stack<String> stackStr = new Stack<>();
-        String num = "";
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) >= '0' && s.charAt(i) <= '9') {
-                num += String.valueOf(s.charAt(i));
+        Stack<Integer> num = new Stack<>();
+        Stack<String> str = new Stack<>();
+        String dig = "";
+        for(char c : s.toCharArray()) {
+            if(c >= '0' && c <= '9') {
+                dig += c;
+            }
+            else if(c == ']') {
+                String repeatStr = "";
+                while(!str.isEmpty()) {
+                    if(str.peek().equals("[")) {
+                        str.pop();
+                        break;
+                    }
+                    repeatStr = str.pop() + repeatStr;
+                }
+                int repeatTime = num.pop();
+                String temp = "";
+                for(int i = 0; i < repeatTime; i++) {
+                    temp += repeatStr;
+                }
+                str.push(temp);
             }
             else {
-                if(num.length() > 0) {
-                    stackNum.push(num);
+                if(dig.length() > 0) {
+                    num.push(Integer.parseInt(dig));
+                    dig = "";
                 }
-                num = "";
-                String str = "";
-                if(s.charAt(i) == ']') {
-                    while(!stackStr.isEmpty() && !stackStr.peek().equals("[")) {
-                        str = stackStr.pop() + str;
-                    }
-                    stackStr.pop();
-                    String newStr = "";
-                    int inum = Integer.parseInt(stackNum.pop());
-                    for(int j = 0; j < inum; j++) {
-                        newStr += str;
-                    }
-                    stackStr.push(newStr);
-                }
-                else {
-                    stackStr.push(String.valueOf(s.charAt(i)));
-                }
+                str.push(Character.toString(c));
             }
         }
         String res = "";
-        while(!stackStr.isEmpty()) {
-            res = stackStr.pop() + res;
+        while(!str.isEmpty()) {
+            res = str.pop() + res;
         }
         return res;
     }
