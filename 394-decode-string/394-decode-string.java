@@ -1,40 +1,33 @@
 class Solution {
     public String decodeString(String s) {
-        Stack<Integer> num = new Stack<>();
-        Stack<String> str = new Stack<>();
-        String dig = "";
+        Queue<Character> q = new LinkedList<>();
         for(char c : s.toCharArray()) {
-            if(c >= '0' && c <= '9') {
-                dig += c;
+            q.offer(c);
+        }
+        return helper(q);
+    }
+    private String helper(Queue<Character> q) {
+        StringBuilder sb = new StringBuilder();
+        int num = 0;
+        while(!q.isEmpty()) {
+            char c = q.poll();
+            if(Character.isDigit(c)) {
+                num = num * 10 + c - '0';
+            }
+            else if(c == '[') {
+                String sub = helper(q);
+                for(int i = 0; i < num; i++) {
+                    sb.append(sub);
+                }
+                num = 0;
+            }
+            else if(c == ']') {
+                break;
             }
             else {
-                if(dig.length() > 0) {
-                    num.push(Integer.parseInt(dig));
-                    dig = "";
-                }
-                if(c == ']') {
-                    String repeatStr = "";
-                    while(!str.isEmpty() && !str.peek().equals("[")) {
-                        repeatStr = str.pop() + repeatStr;
-                    }
-                    str.pop();
-                    int repeatTime = num.pop();
-                    String temp = "";
-                    for(int i = 0; i < repeatTime; i++) {
-                        temp += repeatStr;
-                    }
-                    str.push(temp);
-                }
-                else {
-
-                    str.push(Character.toString(c));
-                }
+                sb.append(c);
             }
         }
-        String res = "";
-        while(!str.isEmpty()) {
-            res = str.pop() + res;
-        }
-        return res;
+        return sb.toString();
     }
 }
