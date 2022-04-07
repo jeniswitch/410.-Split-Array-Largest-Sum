@@ -14,7 +14,7 @@ class Solution {
                 sign = 1;
                 num = 0;
             }
-            if(Character.isDigit(c)) {
+            else if(Character.isDigit(c)) {
                 num = num * 10 + c - '0';
             }
             else if(c == '+') {
