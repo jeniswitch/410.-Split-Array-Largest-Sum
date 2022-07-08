@@ -9,7 +9,12 @@ class Solution {
         return count;
     }
     private boolean EvenNumOfDigits(int num) {
-        String strNum = String.valueOf(num);
-        return strNum.length() % 2 == 0;
+        num = num / 10;
+        int count = 1;
+        while(num > 0) {
+            num = num / 10;
+            count++;
+        }
+        return count % 2 == 0;
     }
 }
