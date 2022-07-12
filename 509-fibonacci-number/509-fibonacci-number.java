@@ -1,14 +1,13 @@
 class Solution {
+    private int[] dp;
     public int fib(int n) {
-        if(n < 2) return n;
-        int pre1 = 0;
-        int pre2 = 1;
-        for(int i = 2; i <= n; i++) {
-            int crr = pre1 + pre2;
-            pre1 = pre2;
-            pre2 = crr;
-        }
-        return pre2;
+        dp = new int[n + 1];
+        return helper(n);
     }
-
+    private int helper(int n) {
+        if(n < 2) return n;
+        if(dp[n] > 0) return dp[n];
+        dp[n] = helper(n - 1) + helper(n - 2);
+        return dp[n];
+    }
 }
