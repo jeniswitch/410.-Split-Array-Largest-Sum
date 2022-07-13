@@ -4,21 +4,16 @@ class Solution {
         for(char c : s.toCharArray()) {
             letters[c - 'a']++;
         }
-        int odd = 0;
-        int even = 0;
+        boolean findodd = false;
         for(int i = 0; i < 26; i++) {
-            if(letters[i] > 0) {
-                if(letters[i] % 2 > 0) {
-                    odd++;
+            if(letters[i] % 2 > 0) {
+                if(findodd) {
+                    return false;
                 }
-                else {
-                    even++;
-                }
+                findodd = true;
             }
-            if(even > 0 && odd > 1) {
-                return false;
-            }
+            
         }
-        return  odd == 0 || even >= 0 && odd == 1;
+        return true;
     }
 }
