@@ -38,25 +38,25 @@ class Solution {
             count[center.charAt(0) - 'a']--;
         }
         System.out.println(uniq);
-        helper(uniq, count, center, center, res, s.length());
+        helper(uniq, count, center, res, s.length());
         return res;
     }
-    private void helper(String uniq, int[] count, String center, String str, List<String> res, int len) {
-        if(str.length() == len) {
-            res.add(str);
+    private void helper(String uniq, int[] count, String center, List<String> res, int len) {
+        if(center.length() == len) {
+            res.add(center);
             return;
         }
         for(char c : uniq.toCharArray()) {
             if(count[c - 'a'] > 0) {
-                str = c + str + c;
+                //str = c + str + c;
                 count[c - 'a'] -= 2;
-                helper(uniq, count, center, str, res, len);
-                if(str.length() > 2) {
+                helper(uniq, count, c + center + c, res, len);
+                /*if(str.length() > 2) {
                     str = str.substring(1, 2) + str.substring(2, str.length() - 1);
                 }
                 else if(str.length() == 2) {
                     str = center;
-                }
+                }*/
                 count[c - 'a'] += 2;
             }
         }
