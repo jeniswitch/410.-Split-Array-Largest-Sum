@@ -5,59 +5,34 @@ class Solution {
         for(char c : s.toCharArray()) {
             count[c - 'a']++;
         }
-        System.out.println(uniq);
         List<String> res = new ArrayList<>();
-        String center = "";
-        Set<Character> set = new HashSet<>();
-        int odd = 0, even = 0;
+        String center = "";     
+        int odd = 0;
         for(int i = 0; i < 26; i++) {
             int ct = count[i];
             if(ct == 0) continue;
-            char c = (char)('a' + i);            
-            
+                  
             if(ct % 2 > 0) {
                 odd++;
-                if(odd > 1) {
-                    return res;
-                }
-                center = String.valueOf(c);
-                set.add(c);
+                if(odd > 1) return res;
+                center = String.valueOf((char)('a' + i));
+                count[i]--;
             }
-            else {
-                if(!set.contains(c)) {
-                    uniq += String.valueOf(c);
-                    set.add(c);
-                }
-               even++; 
-            }
-            
         }
-        //if(odd > 1) return res;
-        if(odd == 1 && count[center.charAt(0) - 'a'] > 1) {
-            uniq += center;
-            count[center.charAt(0) - 'a']--;
-        }
-        System.out.println(uniq);
-        helper(uniq, count, center, res, s.length());
+        helper(count, center, res, s.length());
         return res;
     }
-    private void helper(String uniq, int[] count, String center, List<String> res, int len) {
+    private void helper(int[] count, String center, List<String> res, int len) {
         if(center.length() == len) {
             res.add(center);
             return;
         }
-        for(char c : uniq.toCharArray()) {
-            if(count[c - 'a'] > 0) {
-                //str = c + str + c;
-                count[c - 'a'] -= 2;
-                helper(uniq, count, c + center + c, res, len);
-                /*if(str.length() > 2) {
-                    str = str.substring(1, 2) + str.substring(2, str.length() - 1);
-                }
-                else if(str.length() == 2) {
-                    str = center;
-                }*/
-                count[c - 'a'] += 2;
+        for(int i = 0; i < count.length; i++) {
+            if(count[i] > 0) {
+                char c = (char)('a' + i);
+                count[i] -= 2;
+                helper(count, c + center + c, res, len);
+                count[i] += 2;
             }
         }
     }
