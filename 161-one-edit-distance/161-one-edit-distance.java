@@ -2,35 +2,22 @@ class Solution {
     public boolean isOneEditDistance(String s, String t) {
         int ls = s.length();
         int lt = t.length();
-        
-        if(Math.abs(ls - lt) > 1) return false;
-        if(ls < lt) {
-            return helper(s, t);
+        //if(Math.abs(ls - lt) > 1) return false;
+        boolean sameLength = ls == lt;
+        if(ls > lt) {
+            return isOneEditDistance(t, s);
         }
-        else {
-            return helper(t, s);
-        }
-    }
-    private boolean helper(String s, String t) {
-        int i = 0, j = 0;
-        boolean hasDifference = false;
-        while(i < s.length() && j < t.length()) {
-            if(s.charAt(i) != t.charAt(j)) {
-                if(s.length() == t.length()) {
-                    if(hasDifference) return false;
-                    hasDifference = true;
-                    i++;
+        for(int i = 0; i < ls; i++) {
+            if(s.charAt(i) != t.charAt(i)) {
+                if(sameLength) {
+                    return s.substring(i + 1).equals(t.substring(i + 1));
                 }
-                else if(i != j) {
-                    return false;
+                else {
+                    System.out.println(s.substring(i) + " " + t.substring(i + 1));
+                    return s.substring(i).equals(t.substring(i + 1));
                 }
-                j++;
-            }
-            else {
-                i++;
-                j++;
             }
         }
-        return s.length() == t.length() ? hasDifference : true;
+        return ls + 1 == lt || lt + 1 == ls;
     }
 }
