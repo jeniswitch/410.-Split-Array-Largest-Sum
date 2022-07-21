@@ -3,32 +3,25 @@ class Solution {
         int ls = s.length();
         int lt = t.length();
         
-        if(ls == lt) {
-            return replaceOne(s, t);
-        }
-        if(Math.abs(ls - lt) != 1) return false;
+        if(Math.abs(ls - lt) > 1) return false;
         if(ls < lt) {
-            return insertDeleteOne(s, t);
+            return helper(s, t);
         }
         else {
-            return insertDeleteOne(t, s);
+            return helper(t, s);
         }
     }
-    private boolean replaceOne(String s, String t) {
-        boolean hasDifference = false;
-        for(int i = 0; i < s.length(); i++) {
-            if(s.charAt(i) != t.charAt(i)) {
-                if(hasDifference) return false;
-                hasDifference = true;
-            }
-        }
-        return hasDifference;
-    }
-    private boolean insertDeleteOne(String s, String t) {
+    private boolean helper(String s, String t) {
         int i = 0, j = 0;
+        boolean hasDifference = false;
         while(i < s.length() && j < t.length()) {
             if(s.charAt(i) != t.charAt(j)) {
-                if(i != j) {
+                if(s.length() == t.length()) {
+                    if(hasDifference) return false;
+                    hasDifference = true;
+                    i++;
+                }
+                else if(i != j) {
                     return false;
                 }
                 j++;
@@ -38,6 +31,6 @@ class Solution {
                 j++;
             }
         }
-        return true;
+        return s.length() == t.length() ? hasDifference : true;
     }
 }
