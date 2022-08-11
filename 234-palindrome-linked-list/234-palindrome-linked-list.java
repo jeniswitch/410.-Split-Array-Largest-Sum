@@ -11,23 +11,17 @@
 class Solution {
     public boolean isPalindrome(ListNode head) {
         Stack<Integer> stack = new Stack<>();
-        ListNode slow = head, fast = head;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode slow = dummy, fast = dummy;
         while(fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
+            stack.push(slow.val);
         }
-        ListNode crr = null;
         if(fast != null) {
-            crr = slow.next;
+            slow = slow.next;
         }
-        else {
-            crr = slow;
-        }
-        while(crr != null) {
-            stack.push(crr.val);
-            crr = crr.next;
-        }
-        slow = head;
         while(!stack.isEmpty()) {
             if(slow.val != stack.pop()) {
                 return false;
