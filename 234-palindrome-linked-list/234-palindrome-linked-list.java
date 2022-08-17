@@ -36,13 +36,10 @@ class Solution {
             return res;
         }
         res = helper(node.next, len - 2);
-        if(res.node == null) {
+        if(!res.isPalindrome || res.node == null) {
             return res;
         }
-        if(!res.isPalindrome || res.node.val != node.val) {
-            res.isPalindrome = false;
-            return res;
-        }
+        res.isPalindrome = res.node.val == node.val;
         res.node = res.node.next;
         return res;
     }
