@@ -10,24 +10,40 @@
  */
 class Solution {
     public boolean isPalindrome(ListNode head) {
-        Stack<Integer> stack = new Stack<>();
-        ListNode dummy = new ListNode(0);
-        dummy.next = head;
-        ListNode slow = dummy, fast = dummy;
-        while(fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-            stack.push(slow.val);
+        int len = 0;
+        ListNode crr = head;
+        while(crr != null) {
+            crr = crr.next;
+            len++;
         }
-        if(fast != null) {
-            slow = slow.next;
+        return helper(head, len).isPalindrome;
+    }
+    class Result {
+        ListNode node;
+        boolean isPalindrome;
+        Result() {}
+    }
+    private Result helper(ListNode node, int len) {
+        Result res = new Result();
+        if(node == null || len <= 0) {
+            res.isPalindrome = true;
+            res.node = node;
+            return res;
         }
-        while(!stack.isEmpty()) {
-            if(slow.val != stack.pop()) {
-                return false;
-            }
-            slow = slow.next;
+        else if(len == 1) {
+            res.isPalindrome = true;
+            res.node = node.next;
+            return res;
         }
-        return true;
+        res = helper(node.next, len - 2);
+        if(res.node == null) {
+            return res;
+        }
+        if(!res.isPalindrome || res.node.val != node.val) {
+            res.isPalindrome = false;
+            return res;
+        }
+        res.node = res.node.next;
+        return res;
     }
 }
