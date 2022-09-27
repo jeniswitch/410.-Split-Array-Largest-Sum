@@ -5,27 +5,29 @@ class MyQueue {
         stack1 = new Stack<>();
         stack2 = new Stack<>();
     }
-    
+    private void shift() {
+        if(stack2.isEmpty()) {
+            while(!stack1.isEmpty()) {
+                stack2.push(stack1.pop());
+            }
+        }
+    }
     public void push(int x) {
-        while(!stack1.isEmpty()) {
-            stack2.push(stack1.pop());
-        }
         stack1.push(x);
-        while(!stack2.isEmpty()) {
-            stack1.push(stack2.pop());
-        }
     }
     
     public int pop() {
-        return stack1.pop();
+        shift();
+        return stack2.pop();
     }
     
     public int peek() {
-        return stack1.peek();
+        shift();
+        return stack2.peek();
     }
     
     public boolean empty() {
-        return stack1.isEmpty();
+        return stack1.isEmpty() && stack2.isEmpty();
     }
 }
 
