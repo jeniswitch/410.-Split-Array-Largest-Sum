@@ -22,8 +22,11 @@ class Solution {
             return 0;
         }
         int left = helper(root.left);
+        if(left == -1) {
+            return left;
+        }
         int right = helper(root.right);
-        if(left == -1 || right == -1 || Math.abs(left - right) > 1) {
+        if(right == -1 || Math.abs(left - right) > 1) {
             return -1;
         }
         return Math.max(left, right) + 1;
