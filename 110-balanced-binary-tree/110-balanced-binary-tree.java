@@ -21,11 +21,11 @@ class Solution {
         if(root == null) {
             return 0;
         }
-        int left = helper(root.left) + 1;
-        int right = helper(root.right) + 1;
-        if(left == 0 || right == 0 || Math.abs(left - right) > 1) {
+        int left = helper(root.left);
+        int right = helper(root.right);
+        if(left == -1 || right == -1 || Math.abs(left - right) > 1) {
             return -1;
         }
-        return Math.max(left, right);
+        return Math.max(left, right) + 1;
     }
 }
