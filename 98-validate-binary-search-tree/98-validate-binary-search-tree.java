@@ -14,18 +14,19 @@
  * }
  */
 class Solution {
-    Integer lastData = null;
     public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, null, null);
+    }
+    private boolean isValidBST(TreeNode root, Integer min, Integer max) {
         if(root == null) {
             return true;
         }
-        if(!isValidBST(root.left)) {
+        if(min != null && root.val <= min || max != null && root.val >= max) {
             return false;
         }
-        if(lastData != null && root.val <= lastData) {
+        if(!isValidBST(root.left, min, root.val)) {
             return false;
         }
-        lastData = root.val;
-        return isValidBST(root.right);
+        return isValidBST(root.right, root.val, max);
     }
 }
