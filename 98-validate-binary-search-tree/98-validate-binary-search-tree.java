@@ -24,9 +24,7 @@ class Solution {
         if(min != null && root.val <= min || max != null && root.val >= max) {
             return false;
         }
-        if(!isValidBST(root.left, min, root.val)) {
-            return false;
-        }
-        return isValidBST(root.right, root.val, max);
+
+        return isValidBST(root.left, min, root.val) && isValidBST(root.right, root.val, max);
     }
 }
