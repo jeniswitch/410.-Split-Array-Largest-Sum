@@ -27,7 +27,7 @@ class Solution {
         }
     }
     private Node leftmost(Node node) {
-        while(node != null && node.left != null) {
+        while(node.left != null) {
             node = node.left;
         }
         return node;
