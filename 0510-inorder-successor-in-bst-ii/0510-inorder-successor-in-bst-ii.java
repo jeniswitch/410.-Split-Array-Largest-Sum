@@ -16,15 +16,10 @@ class Solution {
         if(node.right != null) {
             return leftmost(node.right);
         }
-        else {
-            Node c = node;
-            Node p = node.parent;
-            while(p != null && p.left != c) {
-                c = p;
-                p = p.parent;
-            }
-            return p;
+        while(node.parent != null && node.parent.left != node) {
+            node = node.parent;
         }
+        return node.parent;
     }
     private Node leftmost(Node node) {
         while(node.left != null) {
