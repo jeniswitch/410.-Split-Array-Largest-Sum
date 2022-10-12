@@ -20,9 +20,7 @@ class Solution {
         int[] res = new int[numCourses];
         int idx = 0;
         while(!q.isEmpty()) {
-            int size = q.size();
-            while(size-- > 0) {
-                int course = q.poll();
+            int course = q.poll();
                 res[idx++] = course;
                 List<Integer> nbs = map.getOrDefault(course, new ArrayList<>());
                 for(Integer nb : nbs) {
@@ -31,7 +29,6 @@ class Solution {
                         q.offer(nb);
                     }
                 }
-            }
         }
         if(idx != numCourses) {
             return new int[0];
